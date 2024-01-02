@@ -1,0 +1,16 @@
+{
+  "name": "signupstudent",
+  "version": "1.0.0",
+  "description": "Upload user data to MongoDB upon signup",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "mongodb": "^6.3.0"
+  }
+}

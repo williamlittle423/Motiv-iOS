@@ -18,7 +18,9 @@ struct RootOnboarding: View {
             Text("Coming soon.")
 
         } else if (onboardingVM.displayStudentSignup) {
-            StudentNameView().environmentObject(onboardingVM)
+            StudentNameView()
+                .environmentObject(onboardingVM)
+                .environmentObject(appState)
         } else if (onboardingVM.displaySignin) {
             Text("Coming soon.")
         } else if (onboardingVM.displaySignupOptions) {

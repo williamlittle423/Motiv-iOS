@@ -15,11 +15,12 @@ struct StudentNameView: View {
     
     @State private var navigateToProgram: Bool = false
     
+    @EnvironmentObject var appState: AppState
+    
     func nextSlide() {
         signupVM.currentSlide += 1
         navigateToProgram = true
     }
-    
     
     var body: some View {
         NavigationStack {
@@ -52,6 +53,7 @@ struct StudentNameView: View {
                         
                         NavigationLink(destination: StudentProgramView()
                             .toolbar(.hidden)
+                            .environmentObject(appState)
                             .environmentObject(signupVM), isActive: $navigateToProgram) {
                             EmptyView()
                         }

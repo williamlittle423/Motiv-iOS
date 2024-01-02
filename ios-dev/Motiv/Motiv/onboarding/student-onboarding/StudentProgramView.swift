@@ -12,7 +12,7 @@ import SwiftUI
 struct StudentProgramView: View {
     
     @EnvironmentObject var onboardingVM: OnboardingViewModel
-    
+    @EnvironmentObject var appState: AppState
     @EnvironmentObject var signupVM: StudentSignupViewModel
     
     @State private var navigateToGrad: Bool = false
@@ -74,6 +74,7 @@ struct StudentProgramView: View {
                     // Navigation to the grad year page
                     NavigationLink(destination: StudentYearView()
                         .toolbar(.hidden)
+                        .environmentObject(appState)
                         .environmentObject(signupVM),
                                    isActive: $navigateToGrad) {
                         EmptyView()

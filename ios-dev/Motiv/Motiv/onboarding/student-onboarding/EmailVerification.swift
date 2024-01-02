@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 struct EmailVerification: View {
     
     // MARK: Displays textfield for user email
@@ -21,6 +22,14 @@ struct EmailVerification: View {
     @State var err: String = ""
     
     @EnvironmentObject var signupVM: StudentSignupViewModel
+    @EnvironmentObject var appState: AppState
+    
+    @Environment(\.presentationMode) var presentationMode
+    
+    func previousSlide() {
+        signupVM.currentSlide -= 1
+        presentationMode.wrappedValue.dismiss()
+    }
 
     var body: some View {
         GeometryReader { reader in
@@ -34,6 +43,9 @@ struct EmailVerification: View {
                             .frame(width: 14, height: 23)
                             .padding(.horizontal, reader.size.width / 14)
                             .foregroundColor(.white)
+                            .onTapGesture {
+                                previousSlide()
+                            }
                         Spacer()
                     }
                     
@@ -44,6 +56,7 @@ struct EmailVerification: View {
                     // Navigation to the password page
                     NavigationLink(destination: StudentPasswordView()
                         .toolbar(.hidden)
+                        .environmentObject(appState)
                         .environmentObject(signupVM),
                                    isActive: $navigateToPassword) {
                         EmptyView()
@@ -60,7 +73,7 @@ struct EmailVerification: View {
                             // MARK: Once the code is sent, display verification code input
                             Image(systemName: "checkmark.shield.fill")
                                 .resizable()
-                                .frame(width: 22, height: 30)
+                                .frame(width: 24, height: 30)
                                 .foregroundColor(.white)
                                 .padding(.top)
                             // Title text
@@ -96,16 +109,19 @@ struct EmailVerification: View {
                             
                             Button {
                                 // Checks if the OTP matches the one sent
-                                checkOTP(otpEntered: signupVM.verificationInput, validOTP: verCode) { result in
-                                    switch result {
-                                        case .success(let successMessage):
-                                            print(successMessage)
-                                            navigateToPassword = true
-                                        case .failure(let error):
-                                            signupVM.emailViewError = error.localizedDescription
-                                            print(error.localizedDescription)
-                                        }
-                                }
+                                navigateToPassword = true
+                                
+                                // MARK: THIS IS TEMPORARY
+//                                checkOTP(otpEntered: signupVM.verificationInput, validOTP: verCode) { result in
+//                                    switch result {
+//                                        case .success(let successMessage):
+//                                            print(successMessage)
+//                                            navigateToPassword = true
+//                                        case .failure(let error):
+//                                            signupVM.emailViewError = error.localizedDescription
+//                                            print(error.localizedDescription)
+//                                        }
+//                                }
                             } label: {
                                 OnboardingButton(text: "Next", width: reader.size.width, isActive: $otpEntered)
                             }
@@ -127,7 +143,7 @@ struct EmailVerification: View {
                                 .frame(maxWidth: reader.size.width / 2)
                                 .multilineTextAlignment(.center)
                                 .foregroundColor(.white)
-                                .padding()
+                                .padding(.top, 30)
                             
                             Spacer()
                             
@@ -224,15 +240,15 @@ struct SchoolConfirmSheet: View {
                     
                     Spacer()
                     
-                    // MARK: Sends the verification email to the user usin
+                    // MARK: Sends the verification email to the user
                     Button {
-                        signupVM.sendVerification(apiEndpoint: endpoint, payload: ["email": signupVM.email, "verificationCode": verCode]) { result in
-                            switch result {
-                            case .success(let response):
+                        Task {
+                            do {
+                                let response = try await signupVM.sendVerification(apiEndpoint: endpoint, payload: ["email": signupVM.email, "verificationCode": verCode])
                                 print("Email API call response: \(response)")
                                 onConfirm(true)
                                 codeSent = true
-                            case .failure(let error):
+                            } catch {
                                 signupVM.emailViewError = error.localizedDescription
                                 print("Error: \(error.localizedDescription)")
                             }

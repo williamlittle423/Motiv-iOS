@@ -49,6 +49,8 @@
 		86E08CAA2B3C9C5800E3E568 /* F37-Ginger-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 86E08C9E2B3C9C5700E3E568 /* F37-Ginger-Bold.otf */; };
 		86E08CAC2B3C9E1D00E3E568 /* MTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E08CAB2B3C9E1D00E3E568 /* MTextField.swift */; };
 		86E08CB02B3CA29D00E3E568 /* OnboardingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E08CAF2B3CA29D00E3E568 /* OnboardingButton.swift */; };
+		86F965EA2B4207A0001F1250 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F965E92B4207A0001F1250 /* KeychainManager.swift */; };
+		86F965EC2B420BA4001F1250 /* UserAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F965EB2B420BA4001F1250 /* UserAuthentication.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +108,8 @@
 		86E08C9E2B3C9C5700E3E568 /* F37-Ginger-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "F37-Ginger-Bold.otf"; path = "Motiv/Fonts1/F37-Ginger-Bold.otf"; sourceTree = SOURCE_ROOT; };
 		86E08CAB2B3C9E1D00E3E568 /* MTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTextField.swift; sourceTree = "<group>"; };
 		86E08CAF2B3CA29D00E3E568 /* OnboardingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButton.swift; sourceTree = "<group>"; };
+		86F965E92B4207A0001F1250 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		86F965EB2B420BA4001F1250 /* UserAuthentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuthentication.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,12 +212,14 @@
 			isa = PBXGroup;
 			children = (
 				86E08C5F2B3C8FB800E3E568 /* MotivApp.swift */,
+				86F965E92B4207A0001F1250 /* KeychainManager.swift */,
+				86E08C8B2B3C939F00E3E568 /* AppState.swift */,
 				86B642452B40F55E00CABC05 /* onboarding */,
 				86B642362B40C21500CABC05 /* general-views */,
 				86E08C912B3C98AC00E3E568 /* Info.plist */,
 				86E08C612B3C8FB800E3E568 /* ContentView.swift */,
-				86E08C8B2B3C939F00E3E568 /* AppState.swift */,
 				86B642332B40C02400CABC05 /* User.swift */,
+				86F965EB2B420BA4001F1250 /* UserAuthentication.swift */,
 				86E08C9A2B3C9C3100E3E568 /* Fonts */,
 				86E08C632B3C8FBA00E3E568 /* Assets.xcassets */,
 				86E08C652B3C8FBA00E3E568 /* Preview Content */,
@@ -409,6 +415,7 @@
 				86C097F12B412E2800CBBFE2 /* StudentProfilePicView.swift in Sources */,
 				86E08C622B3C8FB800E3E568 /* ContentView.swift in Sources */,
 				86C097F32B413B5900CBBFE2 /* LoadingView.swift in Sources */,
+				86F965EA2B4207A0001F1250 /* KeychainManager.swift in Sources */,
 				86B6424A2B40F97500CABC05 /* StudentSignupViewModel.swift in Sources */,
 				86B6422F2B40910F00CABC05 /* OTPTextField.swift in Sources */,
 				86B642382B40C39400CABC05 /* LaunchScreen.swift in Sources */,
@@ -426,6 +433,7 @@
 				86B642422B40D49600CABC05 /* OnboardingViewModel.swift in Sources */,
 				86E08C602B3C8FB800E3E568 /* MotivApp.swift in Sources */,
 				86B6423A2B40CDE700CABC05 /* OnboardingPhases.swift in Sources */,
+				86F965EC2B420BA4001F1250 /* UserAuthentication.swift in Sources */,
 				86C097F72B413F4700CBBFE2 /* MSecureField.swift in Sources */,
 				86E08C8E2B3C951500E3E568 /* ProgressBar.swift in Sources */,
 				86E08C8C2B3C939F00E3E568 /* AppState.swift in Sources */,
