@@ -15,7 +15,7 @@ class StudentSignupViewModel: ObservableObject {
     // MARK: Student signup information
     @Published var name: String = ""
     @Published var program: String = ""
-    @Published var gradYear: String = ""
+    @Published var gradYear: String = "2025"
     @Published var email: String = ""
     @Published var school: String = ""
     @Published var verificationInput: String = ""
@@ -97,54 +97,6 @@ class StudentSignupViewModel: ObservableObject {
         return responseString
     }
     
-    // MARK: Helper function to convert a UIImage object to a Base64String for upload to AWS S3
-    private func convertImageToBase64String(img: UIImage) -> String? {
-        guard let imageData = img.jpegData(compressionQuality: 0.7) else { return nil }
-        return imageData.base64EncodedString()
-    }
-    
-    // MARK: API call to upload the users profile picture to S3
-    func uploadImageToS3(uiImage: UIImage, userID: String) async throws -> String {
-        
-        guard let base64String = convertImageToBase64String(img: uiImage) else {
-            throw ImageUploadError.invalidImageData
-        }
-
-        // AWS API endpoint
-        let endpoint = "https://djmp9u42l7.execute-api.us-east-2.amazonaws.com/development/file-upload"
-        
-        guard let url = URL(string: endpoint) else {
-            throw ImageUploadError.invalidURL
-        }
-
-        // Prepare the request
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        let body: [String: Any] = ["image": base64String, "userID": userID]
-        request.httpBody = try JSONSerialization.data(withJSONObject: body)
-
-        // Perform the request
-        let (data, response) = try await URLSession.shared.data(for: request)
-
-        // Check for HTTP response errors
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            print("Response was not 200...")
-            throw ImageUploadError.invalidResponse
-        }
-        
-        // Parse the JSON response to extract the URL
-        if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-           let url = json["url"] as? String {
-            // Return the extracted URL
-            return url
-        } else {
-            throw ImageUploadError.invalidResponse
-        }
-    }
-
-    
     
     // MARK: Extract the suffix of the inputted email and return the string of the associated school
     func verifyEmail(email: String, completion: @escaping (String) -> Void) {
@@ -178,20 +130,20 @@ class StudentSignupViewModel: ObservableObject {
     }
         
     // MARK: Sign up the user, performs all checks
-    func signupUser() async throws -> Bool {
+    func signupUser() async throws -> User? {
         
         // Check if password contains required letters, characters, and numbers
         if !(isValidPassword(password)) {
             passwordViewError = "Invalid password. Must contain at least one number, one uppercase letter, one lowercase letter, and one special character"
             print("Invalid password")
-            return false
+            return nil
         }
         
         // Check if passwords match
         if (password != rePassword) {
             passwordViewError = "Passwords do not match. Try again."
             print("Passwords do not match. Try again.")
-            return false
+            return nil
         }
         
         let keychainManager = KeychainManager()
@@ -202,15 +154,19 @@ class StudentSignupViewModel: ObservableObject {
         
         let userID: String = UUID().uuidString
         
+        let dbService = DatabaseService()
+        
         // Upload the profile photo and retreive the url
         var url: String = ""
         do {
-            url = try await uploadImageToS3(uiImage: profilePicture!, userID: userID)
+            url = try await dbService.uploadImageToS3(uiImage: profilePicture!, userID: userID)
             print("API Call Response (should be url): \(url)")
         } catch {
             self.passwordViewError = "Network error occured."
-            return false
+            return nil
         }
+        
+        let school = determineSchool(email: email)
         
         // Create user object
         let newUser = UserAuthentication(_id: userID,
@@ -221,8 +177,17 @@ class StudentSignupViewModel: ObservableObject {
                                          program: program,
                                          joinDate: Date.now,
                                          instagram: "",
-                                         currentAuthToken: authToken,
+                                         privacy: "Public",
+                                         houseID: "",
+                                         friends: [],
+                                         school: school,
                                          password: password)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // Specify your format here
+        let dateString = dateFormatter.string(from: newUser.joinDate)
+        
+        let userObj = User(_id: userID, name: name, email: email, profileImage: profilePicture!, gradYear: gradYear, program: program, joinDate: dateString, instagram: "", privacy: "Public", houseID: "", friends: [])
         
         // Try to upload user data to MongoDB
         do {
@@ -232,19 +197,19 @@ class StudentSignupViewModel: ObservableObject {
                 print("MongoDB upload successfully performed")
             } else {
                 self.passwordViewError = "Network error occured."
-                return false
+                return nil
             }
         } catch {
             print("Error occured during sign up: \(error.localizedDescription)")
             passwordViewError = error.localizedDescription
-            return false
+            return nil
         }
             
         // Store the authentication token for the new user in their devices keychain
         // This is used when the user closes the app and reopens it to obtain their information
         keychainManager.storeAuthToken(authToken, for: deviceID)
         
-        return true
+        return userObj
     }
     
     func uploadUserToMongoDB(user: UserAuthentication) async throws -> Bool {
@@ -321,6 +286,26 @@ class StudentSignupViewModel: ObservableObject {
         }
         
         return true
+    }
+    
+    // MARK: Extract the suffix of the inputted email and return the string of the associated school
+    func determineSchool(email: String) -> String {
+        
+        // Extract the suffix of the email
+        let extractDomain: (String) -> String = { email in
+            let components = email.components(separatedBy: "@")
+            return components.count > 1 ? components[1] : ""
+        }
+
+        let suffix = extractDomain(email)
+        
+        // Verify the suffix
+        switch (suffix) {
+        case "queensu.ca":
+            return "Queen's University"
+        default:
+            return ""
+        }
     }
 
 }

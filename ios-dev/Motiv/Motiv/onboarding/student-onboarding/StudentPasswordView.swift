@@ -56,9 +56,11 @@ struct StudentPasswordView: View {
                         Button {
                             Task {
                                 isLoading = true
-                                let success = try await signupVM.signupUser()
-                                if success {
+                                // Change this to return a user, if the user is nil, it didnt work.
+                                // Set the user to the appState user
+                                if let user: User = try await signupVM.signupUser() {
                                     print("User successfully signed up")
+                                    appState.user = user
                                     isLoading = false
                                     appState.isStudent = true
                                     appState.isLoggedIn = true
@@ -77,7 +79,10 @@ struct StudentPasswordView: View {
                             Text(signupVM.passwordViewError)
                                 .font(.custom("F37Ginger-Light", size: 12))
                                 .foregroundColor(.red)
-                                .padding(5)
+                                .padding(.top, 3)
+                                .padding(.bottom, 7)
+                                .padding(.horizontal)
+                                .multilineTextAlignment(.center)
                         }
                     } else {
                         // Display loading

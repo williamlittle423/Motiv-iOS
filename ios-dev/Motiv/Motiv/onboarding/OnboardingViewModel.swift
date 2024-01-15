@@ -14,7 +14,6 @@ class OnboardingViewModel: ObservableObject {
     @Published var displaySignupOptions: Bool = false
     @Published var displayStudentSignup: Bool = false
     @Published var displaySignin: Bool = false
-    
     @Published var onboardingTab: Int = 0
     
 }

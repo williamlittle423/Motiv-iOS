@@ -16,13 +16,14 @@ struct RootOnboarding: View {
     var body: some View {
         if (onboardingVM.displayEstablishmentSignup) {
             Text("Coming soon.")
-
         } else if (onboardingVM.displayStudentSignup) {
             StudentNameView()
                 .environmentObject(onboardingVM)
                 .environmentObject(appState)
         } else if (onboardingVM.displaySignin) {
-            Text("Coming soon.")
+            LoginScreen()
+                .environmentObject(onboardingVM)
+                .environmentObject(appState)
         } else if (onboardingVM.displaySignupOptions) {
             SignupOptions().environmentObject(onboardingVM)
         } else {

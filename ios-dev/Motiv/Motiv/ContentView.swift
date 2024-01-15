@@ -10,14 +10,17 @@ import SwiftUI
 struct ContentView: View {
     
     @EnvironmentObject var appState: AppState
-    
+        
     var body: some View {
         
         if appState.isInitializing {
             LaunchScreen()
         } else if (appState.isLoggedIn && appState.isStudent) {
             // MARK: User is signed in and is a student
-            Text("Welcome to Motiv for students")
+            NavigationStack {
+                StudentRootView()
+                    .environmentObject(appState)
+            }
         } else if (appState.isLoggedIn && appState.isEstablishment) {
             // MARK: User is signed in and is an establishment
             Text("Welcome to Motiv for establishments")

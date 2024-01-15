@@ -113,40 +113,44 @@ class AppState: ObservableObject {
                 let statusCode: Int
                 let body: String
             }
-            
-            struct UserResponse: Codable {
-                let _id: String
-                let joinDate: String
-                let gradYear: String
-                let program: String
-                let email: String
-                let profileImageURL: String
-                let name: String
-                let instagram: String
-            }
-            
-            let dateFormatter = ISO8601DateFormatter() // Create an ISO8601 date formatter
-            
+                        
             let responseString = String(data: data, encoding: .utf8)
             
             let responseData = try JSONDecoder().decode(ResponseData.self, from: responseString!.data(using: .utf8)!)
-            
+                        
             if responseData.statusCode == 200 {
-                let userResponseString = responseData.body
-                print(userResponseString)
                 if let userData: UserResponse = try? JSONDecoder().decode(UserResponse.self, from: responseData.body.data(using: .utf8)!) {
                     // Create a user instance from the userData and return it
-                    let user = User(
-                        _id: userData._id,
-                        name: userData.name,
-                        email: userData.email,
-                        profileImageURL: userData.profileImageURL,
-                        gradYear: userData.gradYear,
-                        program: userData.program,
-                        joinDate: dateFormatter.date(from: userData.joinDate) ?? Date(), // Convert ISO8601 date string to Date
-                        instagram: userData.instagram
-                    )
-                    return user
+                    let data = Data(base64Encoded: userData.profileImageBase64)
+                    if let image = UIImage(data: data!) {
+                        print("Image conversion worked from Base64 -> UIImage")
+                        // Image conversion worked
+                        let user = User(_id: userData._id,
+                                        name: userData.name,
+                                        email: userData.email,
+                                        profileImage: image,
+                                        gradYear: userData.gradYear,
+                                        program: userData.program,
+                                        joinDate: userData.joinDate,
+                                        instagram: userData.instagram,
+                                        privacy: userData.privacy,
+                                        houseID: userData.houseID,
+                                        friends: userData.friends)
+                        return user
+                    } else {
+                        let user = User(_id: userData._id,
+                                        name: userData.name,
+                                        email: userData.email,
+                                        profileImage: nil,
+                                        gradYear: userData.gradYear,
+                                        program: userData.program,
+                                        joinDate: userData.joinDate,
+                                        instagram: userData.instagram,
+                                        privacy: userData.privacy,
+                                        houseID: userData.houseID,
+                                        friends: userData.friends)
+                        return user
+                    }
                 } else {
                     print("Failed to decode user data.")
                     return nil
@@ -157,4 +161,246 @@ class AppState: ObservableObject {
             }
         }
     }
+    
+    // MARK: Sign out the user
+    // 1. Display loading
+    // 2. Delete authentication token in database (api call)
+    // 3. Delete the users authentication token in keychain
+    // 4. Set user to nil
+    // 5. Set loggedIn to false and isStudent to false
+    // Return an error string if one occurs
+    func signOut() async -> String? {
+        
+        let dbService = DatabaseService()
+        
+        do {
+            // Delete the auth token
+            if user != nil {
+                let success = try await dbService.deleteDocumentInMongoDB(key: "userID", value: user!._id, collection: "auth-tokens")
+                if success {
+                    // Successfully signed out
+                    print("Signed out successfully")
+                    let keychainManager = KeychainManager()
+                    
+                    if let deviceID: String = UIDevice.current.identifierForVendor?.uuidString {
+                        // Remove the authentication token
+                        keychainManager.removeAuthToken(for: deviceID)
+                    } else {
+                        return "An unexpected error occured."
+                    }
+                    
+                    self.isLoggedIn = false
+                    self.isStudent = false
+                    return nil
+                } else {
+                    return "An unexpected error occured."
+                }
+            } else {
+                self.isLoggedIn = false
+                self.isStudent = false
+                return nil
+            }
+        } catch {
+            return error.localizedDescription
+        }
+    }
+    
+    // MARK: Attempt to login a user
+    // 1. Query database for document containing email
+    // 2. Fetch the password in the document
+    // 3. Encrypt the inputted password
+    // 4. Check if the encrypted inputted password matches the fetched document password
+    // 5. If so, create an authentication token (if not, display error)
+    // 6. Return a response of the user
+    func login(email: String, password: String) async throws {
+        
+        let input = UserAuthenticationInput(email: email, password: password)
+        let dateFormatter = ISO8601DateFormatter() // Create an ISO8601 date formatter
+        
+        print("Starting login")
+        
+            // Perform sign in API Call
+            print("Authentication beginning")
+            // Response determined
+            if let response = await authenticateUser(input: input) {
+                // User found
+                if (response.statusCode == 200) {
+                    if let userData: UserResponse = try? JSONDecoder().decode(UserResponse.self, from: response.body!.data(using: .utf8)!) {
+                        print("User authenticated successfully: \(response.body ?? "")")
+                        
+                        let data = Data(base64Encoded: userData.profileImageBase64)
+                        var user: User
+                        if let image = UIImage(data: data!) {
+                            print("Image conversion worked from Base64 -> UIImage")
+                            // Image conversion worked
+                            user = User(_id: userData._id,
+                                            name: userData.name,
+                                            email: userData.email,
+                                            profileImage: image,
+                                            gradYear: userData.gradYear,
+                                            program: userData.program,
+                                            joinDate: userData.joinDate,
+                                            instagram: userData.instagram,
+                                            privacy: userData.privacy,
+                                            houseID: userData.houseID,
+                                            friends: userData.friends)
+                        } else {
+                            user = User(_id: userData._id,
+                                            name: userData.name,
+                                            email: userData.email,
+                                            profileImage: nil,
+                                            gradYear: userData.gradYear,
+                                            program: userData.program,
+                                            joinDate: userData.joinDate,
+                                            instagram: userData.instagram,
+                                            privacy: userData.privacy,
+                                            houseID: userData.houseID,
+                                            friends: userData.friends)
+                        }
+                        
+                        // TODO: Upload authentication token for the user, place it in the keychain
+                        let keychainManager = KeychainManager()
+                        let authToken = keychainManager.generateAuthToken()
+                        
+                        // Try database upload first
+                        do {
+                            let response = try await uploadAuthToken(authToken: authToken, userID: user._id)
+                            if response.statusCode == 200 {
+                                print("Auth token uploaded to MongoDB")
+                            } else {
+                                throw AuthenticationError.networkingError
+                            }
+                        } catch {
+                            throw AuthenticationError.networkingError
+                        }
+                        
+                        // Then place the authToken in the keychain
+                        if let deviceID: String = UIDevice.current.identifierForVendor?.uuidString {
+                            print("Authentication token succesfully placed in user's Keychain")
+                            keychainManager.storeAuthToken(authToken, for: deviceID)
+                        } else {
+                            throw AuthenticationError.invalidResponse
+                        }
+                        
+                        self.user = user
+                        self.isStudent = true
+                        self.isLoggedIn = true
+                    } else {
+                        print("Error decoding user response")
+                        throw AuthenticationError.encodingError
+                    }
+                } else if (response.statusCode == 404) {
+                    print("User not found")
+                    throw AuthenticationError.userNotFound
+                } else if (response.statusCode == 401) {
+                    print("Password doesn't match")
+                    throw AuthenticationError.passwordMatch
+                } else {
+                    throw AuthenticationError.networkingError
+                }
+            } else {
+                print("Authentication failed.")
+                throw AuthenticationError.invalidResponse
+            }
+    }
+    
+    // MARK: Queries the database with user authentication input and verifies if the input matches database records
+    func authenticateUser(input: UserAuthenticationInput) async -> UserAuthenticationResponse? {
+        // Construct the URL for your AWS Lambda function
+        let lambdaURL = URL(string: "https://1xs99gpddb.execute-api.us-east-2.amazonaws.com/development")!
+        
+        // Create a URLRequest
+        var request = URLRequest(url: lambdaURL)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Encode the input as JSON
+        let encoder = JSONEncoder()
+        guard let inputData = try? encoder.encode(input) else {
+            print("Error encoding user input")
+            return nil
+        }
+        
+        request.httpBody = inputData
+        
+        do {
+            // Send the request and handle the response
+            let (data, _) = try await URLSession.shared.data(for: request)
+
+            let decoder = JSONDecoder()
+            let responseModel = try decoder.decode(UserAuthenticationResponse.self, from: data)
+            
+            return responseModel
+        } catch {
+            return nil
+        }
+    }
+
+    // MARK: Upload an authentication token associated with a userID
+    func uploadAuthToken(authToken: String, userID: String) async throws -> APIResponse {
+        let apiUrl = URL(string: "https://1xcl1tekm2.execute-api.us-east-2.amazonaws.com/development")! // Replace with your API Gateway URL
+        var request = URLRequest(url: apiUrl)
+        request.httpMethod = "POST"
+        
+        let body: [String: Any] = [
+            "authToken": authToken,
+            "userID": userID
+        ]
+        
+        let requestData: [String: Any] = [
+            "collection": "auth-tokens",
+            "body": body
+        ]
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: requestData)
+            request.httpBody = jsonData
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                let apiResponse = APIResponse(body: String(data: data, encoding: .utf8) ?? "", statusCode: httpResponse.statusCode)
+                return apiResponse
+            } else {
+                throw AuthenticationError.networkingError
+            }
+        } catch {
+            throw error
+        }
+    }
+}
+
+struct UserAuthenticationResponse: Codable {
+    let statusCode: Int
+    let body: String?
+    let error: String?
+}
+
+struct UserAuthenticationInput: Codable {
+    let email: String
+    let password: String
+}
+
+enum AuthenticationError: Error {
+    case encodingError
+    case networkingError
+    case invalidResponse
+    case passwordMatch
+    case userNotFound
+    
+    var localizedDescription: String {
+            switch self {
+            case .encodingError:
+                return NSLocalizedString("An internal error occured.", comment: "")
+            case .networkingError:
+                return NSLocalizedString("A networking error occurred.", comment: "")
+            case .invalidResponse:
+                return NSLocalizedString("Invalid credentials. Try again.", comment: "")
+            case .passwordMatch:
+                return NSLocalizedString("Invalid password.", comment: "Invalid password.")
+            case .userNotFound:
+                return NSLocalizedString("User not found with email.", comment: "User not found with email.")
+            }
+        }
 }

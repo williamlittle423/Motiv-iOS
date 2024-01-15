@@ -15,12 +15,18 @@ struct StudentYearView: View {
     @EnvironmentObject var signupVM: StudentSignupViewModel
     
     @State private var navigateToProfilePic: Bool = false
-        
+    
+    @State private var selectedYear: GradYear = .twoFive
+
+    
     @Environment(\.presentationMode) var presentationMode
     
     func nextSlide() {
         signupVM.currentSlide += 1
         navigateToProfilePic = true
+        print("Selected year: \(selectedYear)")
+        signupVM.gradYear = selectedYear.desc
+        print("Grad year updated: \(signupVM.gradYear)")
     }
     
     func previousSlide() {
@@ -68,10 +74,10 @@ struct StudentYearView: View {
                     
                     Spacer()
                     
-                    // MARK: Allows students to
-                    Picker("", selection: $signupVM.gradYear) {
-                        ForEach(2023...2027, id: \.self) {
-                            Text(String($0))
+                    // MARK: Allows students to select a year from 2023-2027
+                    Picker("Grad Year", selection: $selectedYear) {
+                        ForEach(GradYear.allCases) { gradYear in
+                            Text(gradYear.desc)
                                 .font(.custom("F37Ginger-Light", size: 14))
                                 .foregroundColor(.white)
                         }
@@ -105,6 +111,19 @@ struct StudentYearView: View {
     }
 }
 
+enum GradYear: String, CaseIterable, Identifiable {
+    case twoThree = "2023"
+    case twoFour = "2024"
+    case twoFive = "2025"
+    case twoSix = "2026"
+    case twoSeven = "2027"
+    
+    var desc: String {
+        return self.rawValue
+    }
+    
+    var id: Self { self }
+}
 
 struct StudentYearView_Previews: PreviewProvider {
     static var previews: some View {

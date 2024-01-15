@@ -1,0 +1,14 @@
+{
+  "name": "deletemongodocument",
+  "version": "1.0.0",
+  "description": " Deletes a document in MongoDB associated with a key value pair in a specified collection",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "William Little",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  }
+}
