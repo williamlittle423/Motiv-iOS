@@ -78,12 +78,6 @@ class AppState: ObservableObject {
         }
     }
     
-    enum APIError: Error {
-        case networkError(Error)
-        case invalidResponse
-        case decodingError(Error)
-    }
-
     // MARK: Perform API gateway call to fetchUser lambda function for retreiving a user
     func fetchUser(authToken: String) async throws -> User? {
         // Your API endpoint URL

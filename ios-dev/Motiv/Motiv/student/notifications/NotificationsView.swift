@@ -10,6 +10,9 @@ import SwiftUI
 struct NotificationsView: View {
     
     @Environment(\.presentationMode) var presentationMode
+    
+    @EnvironmentObject var exploreVM: ExploreViewModel
+    @EnvironmentObject var notificationsManager: NotificationsManager
 
     var body: some View {
         GeometryReader { reader in
@@ -33,6 +36,14 @@ struct NotificationsView: View {
                             .font(.custom("F37Ginger-Bold", size: 22))
                             .padding(.trailing, reader.size.width / 6.5)
                         Spacer()
+                    }
+                    
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(spacing: 20) {
+                            ForEach(notificationsManager.friendRequests, id: \.self) { friend in
+                                FriendNotificationView(width: reader.size.width, user: friend)
+                            }
+                        }
                     }
                     
                     Spacer()

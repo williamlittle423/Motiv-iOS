@@ -17,7 +17,7 @@ class ExploreViewModel: ObservableObject {
         Task {
             do {
                 self.friendsToDisplay = try await fetchFriends(userID: userID, school: school) ?? []
-                print("Updated friends to display: \(self.friendsToDisplay)")
+//                print("Updated friends to display: \(self.friendsToDisplay)")
             } catch {
                 print(error)
             }
@@ -51,7 +51,7 @@ class ExploreViewModel: ObservableObject {
             
             let friendsResponses = try JSONDecoder().decode([FriendsResponse].self, from: bodyData)
             let idList = friendsResponses.map { $0._id }
-            print("id list: \(idList)")
+//            print("id list: \(idList)")
             
             let profileImagesBase64 = await fetchProfilePhotos(idList: idList)
             
@@ -74,7 +74,7 @@ class ExploreViewModel: ObservableObject {
                                     houseID: friendsResponses[i].houseID,
                                     friends: friendsResponses[i].friends)
                     users.append(user)
-                    print("found user \(user.name) - with image")
+//                    print("found user \(user.name) - with image")
                 } else {
                     let user = User(_id: userID,
                                     name: friendsResponses[i].name,
@@ -88,7 +88,7 @@ class ExploreViewModel: ObservableObject {
                                     houseID: friendsResponses[i].houseID,
                                     friends: friendsResponses[i].friends)
                     users.append(user)
-                    print("found user \(user.name) - with image")
+//                    print("found user \(user.name) - with image")
                 }
                 
             }
@@ -128,7 +128,7 @@ class ExploreViewModel: ObservableObject {
         for i in 0..<idList.count {
             let id: String = idList[i]
             let objectKey = "students/profilephotos/\(id)_profilephoto.jpg"
-            print("Object key: \(objectKey)")
+//            print("Object key: \(objectKey)")
             if let base64String = await fetchProfilePhoto(objectKey: objectKey) {
                 base64Images.append(base64String)
             } else {
@@ -161,7 +161,6 @@ class ExploreViewModel: ObservableObject {
                 
         do {
             let response = try await dbService.updateMongo(collectionName: collectionName, filter: filter, update: update) 
-            print("Friend request response: \(response)")
         } catch {
             print(error.localizedDescription)
         }

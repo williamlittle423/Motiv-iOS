@@ -12,6 +12,9 @@ struct StudentRootView: View {
     @State var currentTab: Tab = .map
     @EnvironmentObject var appState: AppState
     @StateObject var exploreVM = ExploreViewModel()
+    @StateObject var notificationsManager = NotificationsManager()
+    
+    @State private var hasCalledAppOpened = false
         
     var body: some View {
         ZStack {
@@ -23,6 +26,7 @@ struct StudentRootView: View {
             case .explore: ExploreView()
                     .environmentObject(appState)
                     .environmentObject(exploreVM)
+                    .environmentObject(notificationsManager)
                 
             case .house: Text("House")
                 
@@ -37,9 +41,16 @@ struct StudentRootView: View {
             
         }
         .onAppear {
-            Task {
-                print("Attempting to call fetchFriends")
-                await exploreVM.appOpened(userID: appState.user!._id, school: appState.user!.school)
+            if !hasCalledAppOpened {
+                Task {
+                    // MARK: Fetch necessary explore page info
+                    await exploreVM.appOpened(userID: appState.user!._id, school: appState.user!.school)
+                    
+                    // MARK: Fetch notifications
+                    await notificationsManager.fetchPendingFriendships(user: appState.user!)
+                    
+                    hasCalledAppOpened = true
+                }
             }
         }
     }

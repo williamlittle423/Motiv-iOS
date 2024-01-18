@@ -13,6 +13,9 @@ struct ExploreView: View {
     
     @EnvironmentObject var exploreVM: ExploreViewModel
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var notificationsManager: NotificationsManager
+    
+    @State var notificationsActive: Bool = false
     
     enum ExploreTab {
         case friends
@@ -46,6 +49,17 @@ struct ExploreView: View {
                             .padding(.top, 5)
                             .padding(.leading, reader.size.width / 9)
                         Spacer()
+                        
+                        NavigationLink(destination: NotificationsView()
+                            .environmentObject(notificationsManager)
+                            .environmentObject(exploreVM)
+                            .toolbar(.hidden),
+                                       isActive: $notificationsActive) {
+                            EmptyView()
+                        }
+    
+                        
+                        
                         // Notifications bell
                         ZStack {
                             Image(systemName: "bell")
@@ -59,6 +73,9 @@ struct ExploreView: View {
                         }
                         .padding(.top, 5)
                         .padding(.trailing, reader.size.width / 16)
+                        .onTapGesture {
+                            notificationsActive = true
+                        }
                     }
                     
                     // Search textfield

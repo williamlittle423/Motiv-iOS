@@ -8,7 +8,8 @@
 import Foundation
 import SwiftUI
 
-struct User {
+struct User: Hashable {
+    
     var _id: String
     var name: String
     var email: String

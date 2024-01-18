@@ -11,6 +11,9 @@
 		86A0E7A42B4DBD1C006FE218 /* FriendCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0E7A32B4DBD1C006FE218 /* FriendCardView.swift */; };
 		86A0E7A62B55A347006FE218 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0E7A52B55A347006FE218 /* APIResponse.swift */; };
 		86A0E7AA2B55A9E3006FE218 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0E7A92B55A9E3006FE218 /* NotificationsView.swift */; };
+		86A0E7AC2B56F5A4006FE218 /* NotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0E7AB2B56F5A4006FE218 /* NotificationsManager.swift */; };
+		86A0E7AE2B56F66C006FE218 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0E7AD2B56F66C006FE218 /* APIError.swift */; };
+		86A0E7B02B56FCC0006FE218 /* UserRawResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0E7AF2B56FCC0006FE218 /* UserRawResponse.swift */; };
 		86B6422F2B40910F00CABC05 /* OTPTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B6422E2B40910E00CABC05 /* OTPTextField.swift */; };
 		86B642322B40B7C100CABC05 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 86B642312B40B7C100CABC05 /* KeychainAccess */; };
 		86B642342B40C02400CABC05 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B642332B40C02400CABC05 /* User.swift */; };
@@ -25,6 +28,7 @@
 		86B6424A2B40F97500CABC05 /* StudentSignupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B642492B40F97500CABC05 /* StudentSignupViewModel.swift */; };
 		86B6424C2B40FB4300CABC05 /* StudentProgramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B6424B2B40FB4300CABC05 /* StudentProgramView.swift */; };
 		86B6424E2B40FE4400CABC05 /* StudentYearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B6424D2B40FE4400CABC05 /* StudentYearView.swift */; };
+		86B7E2AB2B58BFCB00A29E8E /* FriendNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B7E2AA2B58BFCB00A29E8E /* FriendNotificationView.swift */; };
 		86C097F12B412E2800CBBFE2 /* StudentProfilePicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C097F02B412E2800CBBFE2 /* StudentProfilePicView.swift */; };
 		86C097F32B413B5900CBBFE2 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C097F22B413B5900CBBFE2 /* LoadingView.swift */; };
 		86C097F52B413E1F00CBBFE2 /* StudentPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C097F42B413E1F00CBBFE2 /* StudentPasswordView.swift */; };
@@ -93,6 +97,9 @@
 		86A0E7A32B4DBD1C006FE218 /* FriendCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCardView.swift; sourceTree = "<group>"; };
 		86A0E7A52B55A347006FE218 /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
 		86A0E7A92B55A9E3006FE218 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		86A0E7AB2B56F5A4006FE218 /* NotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsManager.swift; sourceTree = "<group>"; };
+		86A0E7AD2B56F66C006FE218 /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
+		86A0E7AF2B56FCC0006FE218 /* UserRawResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRawResponse.swift; sourceTree = "<group>"; };
 		86B6422E2B40910E00CABC05 /* OTPTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPTextField.swift; sourceTree = "<group>"; };
 		86B642332B40C02400CABC05 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		86B642372B40C39400CABC05 /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
@@ -106,6 +113,7 @@
 		86B642492B40F97500CABC05 /* StudentSignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentSignupViewModel.swift; sourceTree = "<group>"; };
 		86B6424B2B40FB4300CABC05 /* StudentProgramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentProgramView.swift; sourceTree = "<group>"; };
 		86B6424D2B40FE4400CABC05 /* StudentYearView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentYearView.swift; sourceTree = "<group>"; };
+		86B7E2AA2B58BFCB00A29E8E /* FriendNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendNotificationView.swift; sourceTree = "<group>"; };
 		86C097F02B412E2800CBBFE2 /* StudentProfilePicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentProfilePicView.swift; sourceTree = "<group>"; };
 		86C097F22B413B5900CBBFE2 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		86C097F42B413E1F00CBBFE2 /* StudentPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentPasswordView.swift; sourceTree = "<group>"; };
@@ -178,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				86A0E7A52B55A347006FE218 /* APIResponse.swift */,
+				86A0E7AD2B56F66C006FE218 /* APIError.swift */,
 				86F966002B451D47001F1250 /* DatabaseService.swift */,
 			);
 			path = network;
@@ -187,6 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				86A0E7A92B55A9E3006FE218 /* NotificationsView.swift */,
+				86B7E2AA2B58BFCB00A29E8E /* FriendNotificationView.swift */,
 			);
 			path = notifications;
 			sourceTree = "<group>";
@@ -347,6 +357,7 @@
 				86B642332B40C02400CABC05 /* User.swift */,
 				86F966082B45DA1A001F1250 /* UserResponse.swift */,
 				86F9660A2B45DB34001F1250 /* UserUpload.swift */,
+				86A0E7AF2B56FCC0006FE218 /* UserRawResponse.swift */,
 				86F965FA2B450CF7001F1250 /* Friendship.swift */,
 				86F965EB2B420BA4001F1250 /* UserAuthentication.swift */,
 			);
@@ -377,6 +388,7 @@
 			children = (
 				86F966062B45B3AD001F1250 /* UserProfileVM.swift */,
 				86A0E7A12B4C5954006FE218 /* ExploreViewModel.swift */,
+				86A0E7AB2B56F5A4006FE218 /* NotificationsManager.swift */,
 			);
 			path = "view-models";
 			sourceTree = "<group>";
@@ -540,11 +552,13 @@
 				86F965EA2B4207A0001F1250 /* KeychainManager.swift in Sources */,
 				86B6424A2B40F97500CABC05 /* StudentSignupViewModel.swift in Sources */,
 				86B6422F2B40910F00CABC05 /* OTPTextField.swift in Sources */,
+				86A0E7AE2B56F66C006FE218 /* APIError.swift in Sources */,
 				86B642382B40C39400CABC05 /* LaunchScreen.swift in Sources */,
 				86B642482B40F68800CABC05 /* StudentNameView.swift in Sources */,
 				86F965F82B44E239001F1250 /* InstagramDisplay.swift in Sources */,
 				86F966092B45DA1A001F1250 /* UserResponse.swift in Sources */,
 				86C720612B4660C4009EAE2F /* ExploreView.swift in Sources */,
+				86B7E2AB2B58BFCB00A29E8E /* FriendNotificationView.swift in Sources */,
 				86F9660B2B45DB34001F1250 /* UserUpload.swift in Sources */,
 				86A0E7A42B4DBD1C006FE218 /* FriendCardView.swift in Sources */,
 				86E08CAC2B3C9E1D00E3E568 /* MTextField.swift in Sources */,
@@ -552,6 +566,7 @@
 				86B6424E2B40FE4400CABC05 /* StudentYearView.swift in Sources */,
 				86E08CB02B3CA29D00E3E568 /* OnboardingButton.swift in Sources */,
 				86F965FD2B450EC0001F1250 /* UserSettingsView.swift in Sources */,
+				86A0E7AC2B56F5A4006FE218 /* NotificationsManager.swift in Sources */,
 				86E08C8A2B3C938100E3E568 /* EmailVerification.swift in Sources */,
 				86B642402B40D48000CABC05 /* RootOnboarding.swift in Sources */,
 				86B642342B40C02400CABC05 /* User.swift in Sources */,
@@ -570,6 +585,7 @@
 				86F965F62B44D2B9001F1250 /* UserProfileView.swift in Sources */,
 				86F965EC2B420BA4001F1250 /* UserAuthentication.swift in Sources */,
 				86C097F72B413F4700CBBFE2 /* MSecureField.swift in Sources */,
+				86A0E7B02B56FCC0006FE218 /* UserRawResponse.swift in Sources */,
 				86E08C8E2B3C951500E3E568 /* ProgressBar.swift in Sources */,
 				86E08C8C2B3C939F00E3E568 /* AppState.swift in Sources */,
 				86F965FF2B45139B001F1250 /* SignOutButton.swift in Sources */,

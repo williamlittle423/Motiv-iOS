@@ -1,0 +1,16 @@
+{
+  "name": "fetchsingleuser",
+  "version": "1.0.0",
+  "description": "Fetch a single user object from a _id in MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "William Little",
+  "license": "ISC",
+  "dependencies": {
+    "aws": "^0.0.3-2",
+    "aws-sdk": "^2.1538.0",
+    "mongodb": "^6.3.0"
+  }
+}
