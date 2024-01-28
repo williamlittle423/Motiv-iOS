@@ -58,6 +58,9 @@
 		86E08CAA2B3C9C5800E3E568 /* F37-Ginger-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 86E08C9E2B3C9C5700E3E568 /* F37-Ginger-Bold.otf */; };
 		86E08CAC2B3C9E1D00E3E568 /* MTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E08CAB2B3C9E1D00E3E568 /* MTextField.swift */; };
 		86E08CB02B3CA29D00E3E568 /* OnboardingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E08CAF2B3CA29D00E3E568 /* OnboardingButton.swift */; };
+		86E53D922B6409D70034C5C0 /* LoadingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E53D912B6409D70034C5C0 /* LoadingCardView.swift */; };
+		86E53D982B64237B0034C5C0 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 86E53D972B64237B0034C5C0 /* SDWebImageSwiftUI */; };
+		86E53D9A2B6433D10034C5C0 /* AuthTokenObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E53D992B6433D10034C5C0 /* AuthTokenObject.swift */; };
 		86F965EA2B4207A0001F1250 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F965E92B4207A0001F1250 /* KeychainManager.swift */; };
 		86F965EC2B420BA4001F1250 /* UserAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F965EB2B420BA4001F1250 /* UserAuthentication.swift */; };
 		86F965EF2B44D07C001F1250 /* StudentRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F965EE2B44D07C001F1250 /* StudentRootView.swift */; };
@@ -139,6 +142,8 @@
 		86E08C9E2B3C9C5700E3E568 /* F37-Ginger-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "F37-Ginger-Bold.otf"; path = "Motiv/Fonts1/F37-Ginger-Bold.otf"; sourceTree = SOURCE_ROOT; };
 		86E08CAB2B3C9E1D00E3E568 /* MTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTextField.swift; sourceTree = "<group>"; };
 		86E08CAF2B3CA29D00E3E568 /* OnboardingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButton.swift; sourceTree = "<group>"; };
+		86E53D912B6409D70034C5C0 /* LoadingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCardView.swift; sourceTree = "<group>"; };
+		86E53D992B6433D10034C5C0 /* AuthTokenObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenObject.swift; sourceTree = "<group>"; };
 		86F965E92B4207A0001F1250 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		86F965EB2B420BA4001F1250 /* UserAuthentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuthentication.swift; sourceTree = "<group>"; };
 		86F965EE2B44D07C001F1250 /* StudentRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentRootView.swift; sourceTree = "<group>"; };
@@ -161,6 +166,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86E53D982B64237B0034C5C0 /* SDWebImageSwiftUI in Frameworks */,
 				86B642322B40B7C100CABC05 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -257,6 +263,7 @@
 			children = (
 				86C720602B4660C4009EAE2F /* ExploreView.swift */,
 				86A0E7A32B4DBD1C006FE218 /* FriendCardView.swift */,
+				86E53D912B6409D70034C5C0 /* LoadingCardView.swift */,
 			);
 			path = explore;
 			sourceTree = "<group>";
@@ -355,6 +362,7 @@
 			isa = PBXGroup;
 			children = (
 				86B642332B40C02400CABC05 /* User.swift */,
+				86E53D992B6433D10034C5C0 /* AuthTokenObject.swift */,
 				86F966082B45DA1A001F1250 /* UserResponse.swift */,
 				86F9660A2B45DB34001F1250 /* UserUpload.swift */,
 				86A0E7AF2B56FCC0006FE218 /* UserRawResponse.swift */,
@@ -411,6 +419,7 @@
 			name = Motiv;
 			packageProductDependencies = (
 				86B642312B40B7C100CABC05 /* KeychainAccess */,
+				86E53D972B64237B0034C5C0 /* SDWebImageSwiftUI */,
 			);
 			productName = Motiv;
 			productReference = 86E08C5C2B3C8FB800E3E568 /* Motiv.app */;
@@ -486,6 +495,7 @@
 			mainGroup = 86E08C532B3C8FB800E3E568;
 			packageReferences = (
 				86B642302B40B7C000CABC05 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				86E53D962B64237B0034C5C0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			productRefGroup = 86E08C5D2B3C8FB800E3E568 /* Products */;
 			projectDirPath = "";
@@ -583,11 +593,13 @@
 				86B6423A2B40CDE700CABC05 /* OnboardingPhases.swift in Sources */,
 				86F966042B452317001F1250 /* LoginScreen.swift in Sources */,
 				86F965F62B44D2B9001F1250 /* UserProfileView.swift in Sources */,
+				86E53D922B6409D70034C5C0 /* LoadingCardView.swift in Sources */,
 				86F965EC2B420BA4001F1250 /* UserAuthentication.swift in Sources */,
 				86C097F72B413F4700CBBFE2 /* MSecureField.swift in Sources */,
 				86A0E7B02B56FCC0006FE218 /* UserRawResponse.swift in Sources */,
 				86E08C8E2B3C951500E3E568 /* ProgressBar.swift in Sources */,
 				86E08C8C2B3C939F00E3E568 /* AppState.swift in Sources */,
+				86E53D9A2B6433D10034C5C0 /* AuthTokenObject.swift in Sources */,
 				86F965FF2B45139B001F1250 /* SignOutButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -925,6 +937,14 @@
 				kind = branch;
 			};
 		};
+		86E53D962B64237B0034C5C0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -932,6 +952,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 86B642302B40B7C000CABC05 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		86E53D972B64237B0034C5C0 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86E53D962B64237B0034C5C0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

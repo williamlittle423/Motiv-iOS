@@ -12,16 +12,56 @@ import SwiftUI
 class ExploreViewModel: ObservableObject {
     
     @Published var friendsToDisplay: [User] = []
+    @Published var fetchingFriends: Bool = false
     
     func appOpened(userID: String, school: String) async {
         Task {
             do {
-                self.friendsToDisplay = try await fetchFriends(userID: userID, school: school) ?? []
-//                print("Updated friends to display: \(self.friendsToDisplay)")
+                fetchingFriends = true
+                if let fetchedUsers = try await fetchUsersFromSchool(userID: userID, school: "Queen's University") {
+                    self.friendsToDisplay = fetchedUsers
+                    print("Success finding users to display")
+                }
+                fetchingFriends = false
             } catch {
+                fetchingFriends = false
                 print(error)
             }
         }
+    }
+    
+    // MARK: Fetch friends V2
+    func fetchUsersFromSchool(userID: String, school: String) async -> [User]? {
+        
+        // Make API call to fetch all the raw users
+        let queryParams: [String: Any] = [
+            "school": school
+        ]
+        
+        let dbService = DatabaseService()
+        
+        // Fetch the data
+        do {
+            let data = try await dbService.generalDBQuery(queryParams: queryParams, collection: "users")
+                        
+            let responseData = try JSONDecoder().decode(ResponseData.self, from: data)
+            
+            guard let bodyData = responseData.body.data(using: .utf8) else {
+                print("Error converting body string to Data")
+                return nil
+            }
+            
+            let dataString = String(data: bodyData, encoding: .utf8)
+                        
+            let userResponse = try JSONDecoder().decode([User].self, from: bodyData)
+                        
+            return userResponse
+            
+        } catch {
+            print("An error occured querying all the users")
+        }
+        
+        return nil
     }
     
     // MARK: Retreive a list of users to display in the friends tab of the explore view
@@ -49,50 +89,18 @@ class ExploreViewModel: ObservableObject {
                 return nil
             }
             
-            let friendsResponses = try JSONDecoder().decode([FriendsResponse].self, from: bodyData)
+            let friendsResponses = try JSONDecoder().decode([User].self, from: bodyData)
             let idList = friendsResponses.map { $0._id }
-//            print("id list: \(idList)")
             
-            let profileImagesBase64 = await fetchProfilePhotos(idList: idList)
-            
-            var users: [User] = []
-            for i in 0..<friendsResponses.count {
-                let userID = friendsResponses[i]._id
-                let base64String = profileImagesBase64[i]
-                if let imageData = Data(base64Encoded: base64String) {
-                    // Create user object for each person
-                    let image = UIImage(data: imageData)
-                    let user = User(_id: userID,
-                                    name: friendsResponses[i].name,
-                                    email: friendsResponses[i].email,
-                                    profileImage: image,
-                                    gradYear: friendsResponses[i].gradYear,
-                                    program: friendsResponses[i].program,
-                                    joinDate: friendsResponses[i].joinDate,
-                                    instagram: friendsResponses[i].instagram,
-                                    privacy: friendsResponses[i].privacy,
-                                    houseID: friendsResponses[i].houseID,
-                                    friends: friendsResponses[i].friends)
-                    users.append(user)
-//                    print("found user \(user.name) - with image")
-                } else {
-                    let user = User(_id: userID,
-                                    name: friendsResponses[i].name,
-                                    email: friendsResponses[i].email,
-                                    profileImage: nil,
-                                    gradYear: friendsResponses[i].gradYear,
-                                    program: friendsResponses[i].program,
-                                    joinDate: friendsResponses[i].joinDate,
-                                    instagram: friendsResponses[i].instagram,
-                                    privacy: friendsResponses[i].privacy,
-                                    houseID: friendsResponses[i].houseID,
-                                    friends: friendsResponses[i].friends)
-                    users.append(user)
-//                    print("found user \(user.name) - with image")
-                }
-                
-            }
-            return users
+            return friendsResponses
+//
+//            var users: [User] = []
+//            for i in 0..<friendsResponses.count {
+//                let userID = friendsResponses[i]._id
+//                print("Fetch friends function")
+//            }
+//
+//            return users
         } catch {
             print("Error fetching friends: \(error)")
         }
@@ -160,7 +168,7 @@ class ExploreViewModel: ObservableObject {
         let dbService = DatabaseService()
                 
         do {
-            let response = try await dbService.updateMongo(collectionName: collectionName, filter: filter, update: update) 
+            let response = try await dbService.updateMongo(collectionName: collectionName, filter: filter, update: update, options: [:]) 
         } catch {
             print(error.localizedDescription)
         }

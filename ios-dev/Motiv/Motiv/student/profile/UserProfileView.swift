@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 enum profileTab {
     case friends
@@ -52,18 +53,18 @@ struct UserProfileView: View {
                                 navigateToSettings = true
                             }
                     }
-                    
-                    if let profilePic = appState.user?.profileImage {
-                        Image(uiImage: profilePic)
+
+                    if let profilePic = WebImage(url: URL(string: (appState.user?.profileImageURL)!)) {
+                        profilePic
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 110, height: 110)
+                            .frame(width: reader.size.width / 4, height: reader.size.width / 4)
                             .clipShape(Circle())
                             .overlay(Circle().stroke(Color.white, lineWidth: 1))
                     } else {
                         Circle()
                             .stroke(Color("LightGrey"), lineWidth: 1)
-                            .frame(width: 110, height: 110)
+                            .frame(width: reader.size.width / 4, height: reader.size.width / 4)
                             .padding(.bottom)
                     }
                     

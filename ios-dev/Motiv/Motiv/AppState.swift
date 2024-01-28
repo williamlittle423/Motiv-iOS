@@ -71,90 +71,141 @@ class AppState: ObservableObject {
         
         // Attempt database query for user
         do {
-            return try await fetchUser(authToken: authToken!)
+            return try await fetchUserFromAuthToken(authToken: authToken!)
         } catch {
             print("Error occured: \(error)")
             return nil
         }
     }
     
-    // MARK: Perform API gateway call to fetchUser lambda function for retreiving a user
-    func fetchUser(authToken: String) async throws -> User? {
-        // Your API endpoint URL
-        let apiURL = URL(string: "https://v68xnmoi64.execute-api.us-east-2.amazonaws.com/development")!
+    // MARK: Performs fetchUser more efficiently *hopefully
+    func fetchUserFromAuthToken(authToken: String) async throws -> User? {
         
-        // Create a UserRequest struct to encode the authToken
-        struct UserRequest: Codable {
-            let auth_token: String
+        let dbService = DatabaseService()
+        
+        let tokenQuery = [
+            "authToken": authToken
+        ]
+        
+        struct ResponseData: Codable {
+            let statusCode: Int
+            let body: String
         }
         
-        let userRequest = UserRequest(auth_token: authToken)
-        
         do {
-            // Encode the UserRequest struct as JSON data
-            let jsonData = try JSONEncoder().encode(userRequest)
+            // Perform a query for a AuthToken object
+            let tokenData = try await dbService.generalDBQuery(queryParams: tokenQuery, collection: "auth-tokens")
+            let tokenResponseString = String(data: tokenData, encoding: .utf8)
+            print("TOKEN DATA: \(tokenResponseString)")
             
-            // Create an HTTP request
-            var request = URLRequest(url: apiURL)
-            request.httpMethod = "POST"
-            request.httpBody = jsonData
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            let tokenResponseData = try JSONDecoder().decode(ResponseData.self, from: tokenResponseString!.data(using: .utf8)!)
             
-            // Send the request and get the response data
-            let (data, _) = try await URLSession.shared.data(for: request)
-            
-            struct ResponseData: Codable {
-                let statusCode: Int
-                let body: String
-            }
-                        
-            let responseString = String(data: data, encoding: .utf8)
-            
-            let responseData = try JSONDecoder().decode(ResponseData.self, from: responseString!.data(using: .utf8)!)
-                        
-            if responseData.statusCode == 200 {
-                if let userData: UserResponse = try? JSONDecoder().decode(UserResponse.self, from: responseData.body.data(using: .utf8)!) {
-                    // Create a user instance from the userData and return it
-                    let data = Data(base64Encoded: userData.profileImageBase64)
-                    if let image = UIImage(data: data!) {
-                        print("Image conversion worked from Base64 -> UIImage")
-                        // Image conversion worked
-                        let user = User(_id: userData._id,
-                                        name: userData.name,
-                                        email: userData.email,
-                                        profileImage: image,
-                                        gradYear: userData.gradYear,
-                                        program: userData.program,
-                                        joinDate: userData.joinDate,
-                                        instagram: userData.instagram,
-                                        privacy: userData.privacy,
-                                        houseID: userData.houseID,
-                                        friends: userData.friends)
-                        return user
+            if tokenResponseData.statusCode == 200 {
+                print(tokenResponseData.body)
+                if let token: [AuthTokenObject] = try? JSONDecoder().decode([AuthTokenObject].self, from: tokenResponseData.body.data(using: .utf8)!) {
+                    if (token.count == 1) {
+                        print("WORKED: Trying to fetch user with \(token[0].userID)")
+                        return await dbService.fetchUser(userID: token[0].userID)
                     } else {
-                        let user = User(_id: userData._id,
-                                        name: userData.name,
-                                        email: userData.email,
-                                        profileImage: nil,
-                                        gradYear: userData.gradYear,
-                                        program: userData.program,
-                                        joinDate: userData.joinDate,
-                                        instagram: userData.instagram,
-                                        privacy: userData.privacy,
-                                        houseID: userData.houseID,
-                                        friends: userData.friends)
-                        return user
+                        print("Too many auth tokens associated with user")
+                        return nil
                     }
                 } else {
-                    print("Failed to decode user data.")
+                    print("No user associated with token data")
                     return nil
                 }
             } else {
-                print("Non-200 status code in response.")
-                return nil
+                print("Error code 500 obtaining current user")
             }
+            
+            
+        } catch {
+            print("Error fetching current user")
+            return nil
         }
+        
+        print("No user found")
+        return nil
     }
+    
+    
+    // MARK: Perform API gateway call to fetchUser lambda function for retreiving a user
+//    func fetchUser(authToken: String) async throws -> User? {
+//        // Your API endpoint URL
+//        let apiURL = URL(string: "https://v68xnmoi64.execute-api.us-east-2.amazonaws.com/development")!
+//
+//        // Create a UserRequest struct to encode the authToken
+//        struct UserRequest: Codable {
+//            let auth_token: String
+//        }
+//
+//        let userRequest = UserRequest(auth_token: authToken)
+//
+//        do {
+//            // Encode the UserRequest struct as JSON data
+//            let jsonData = try JSONEncoder().encode(userRequest)
+//
+//            // Create an HTTP request
+//            var request = URLRequest(url: apiURL)
+//            request.httpMethod = "POST"
+//            request.httpBody = jsonData
+//            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//
+//            // Send the request and get the response data
+//            let (data, _) = try await URLSession.shared.data(for: request)
+//
+//            struct ResponseData: Codable {
+//                let statusCode: Int
+//                let body: String
+//            }
+//
+//            let responseString = String(data: data, encoding: .utf8)
+//
+//            let responseData = try JSONDecoder().decode(ResponseData.self, from: responseString!.data(using: .utf8)!)
+//
+//            if responseData.statusCode == 200 {
+//                if let userData: UserResponse = try? JSONDecoder().decode(UserResponse.self, from: responseData.body.data(using: .utf8)!) {
+//                    // Create a user instance from the userData and return it
+//                    let data = Data(base64Encoded: userData.profileImageBase64)
+//                    if let image = UIImage(data: data!) {
+//                        print("Image conversion worked from Base64 -> UIImage")
+//                        // Image conversion worked
+//                        let user = User(_id: userData._id,
+//                                        name: userData.name,
+//                                        email: userData.email,
+//                                        profileImage: image,
+//                                        gradYear: userData.gradYear,
+//                                        program: userData.program,
+//                                        joinDate: userData.joinDate,
+//                                        instagram: userData.instagram,
+//                                        privacy: userData.privacy,
+//                                        houseID: userData.houseID,
+//                                        friends: userData.friends)
+//                        return user
+//                    } else {
+//                        let user = User(_id: userData._id,
+//                                        name: userData.name,
+//                                        email: userData.email,
+//                                        profileImage: nil,
+//                                        gradYear: userData.gradYear,
+//                                        program: userData.program,
+//                                        joinDate: userData.joinDate,
+//                                        instagram: userData.instagram,
+//                                        privacy: userData.privacy,
+//                                        houseID: userData.houseID,
+//                                        friends: userData.friends)
+//                        return user
+//                    }
+//                } else {
+//                    print("Failed to decode user data.")
+//                    return nil
+//                }
+//            } else {
+//                print("Non-200 status code in response.")
+//                return nil
+//            }
+//        }
+//    }
     
     // MARK: Sign out the user
     // 1. Display loading
@@ -219,38 +270,8 @@ class AppState: ObservableObject {
             if let response = await authenticateUser(input: input) {
                 // User found
                 if (response.statusCode == 200) {
-                    if let userData: UserResponse = try? JSONDecoder().decode(UserResponse.self, from: response.body!.data(using: .utf8)!) {
+                    if let user: User = try? JSONDecoder().decode(User.self, from: response.body!.data(using: .utf8)!) {
                         print("User authenticated successfully: \(response.body ?? "")")
-                        
-                        let data = Data(base64Encoded: userData.profileImageBase64)
-                        var user: User
-                        if let image = UIImage(data: data!) {
-                            print("Image conversion worked from Base64 -> UIImage")
-                            // Image conversion worked
-                            user = User(_id: userData._id,
-                                            name: userData.name,
-                                            email: userData.email,
-                                            profileImage: image,
-                                            gradYear: userData.gradYear,
-                                            program: userData.program,
-                                            joinDate: userData.joinDate,
-                                            instagram: userData.instagram,
-                                            privacy: userData.privacy,
-                                            houseID: userData.houseID,
-                                            friends: userData.friends)
-                        } else {
-                            user = User(_id: userData._id,
-                                            name: userData.name,
-                                            email: userData.email,
-                                            profileImage: nil,
-                                            gradYear: userData.gradYear,
-                                            program: userData.program,
-                                            joinDate: userData.joinDate,
-                                            instagram: userData.instagram,
-                                            privacy: userData.privacy,
-                                            houseID: userData.houseID,
-                                            friends: userData.friends)
-                        }
                         
                         // TODO: Upload authentication token for the user, place it in the keychain
                         let keychainManager = KeychainManager()

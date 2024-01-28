@@ -11,3 +11,4 @@ struct Friendship: Codable, Hashable {
     var friend_id: String
     var status: String
 }
+

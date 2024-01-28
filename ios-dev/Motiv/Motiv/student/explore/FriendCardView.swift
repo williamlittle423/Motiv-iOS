@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct FriendCardView: View {
     
@@ -25,8 +26,8 @@ struct FriendCardView: View {
             VStack {
                 // Two items in this
                 HStack {
-                    if let profilePic = user.profileImage {
-                        Image(uiImage: profilePic)
+                    if let profilePic = WebImage(url: URL(string: user.profileImageURL ?? "")) {
+                        profilePic
                             .resizable()
                             .scaledToFill()
                             .frame(width: width / 10, height: width / 10)
@@ -73,8 +74,5 @@ struct FriendCardView: View {
             }
             .frame(width: width / 1.2, height: width / 3)
         }
-        
-        
-        
     }
 }

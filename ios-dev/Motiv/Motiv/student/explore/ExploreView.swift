@@ -53,6 +53,7 @@ struct ExploreView: View {
                         NavigationLink(destination: NotificationsView()
                             .environmentObject(notificationsManager)
                             .environmentObject(exploreVM)
+                            .environmentObject(appState)
                             .toolbar(.hidden),
                                        isActive: $notificationsActive) {
                             EmptyView()
@@ -104,7 +105,7 @@ struct ExploreView: View {
                     
                     HStack {
                         Text("Discover")
-                            .font(.custom("F37Ginger-Bold", size: 12))
+                            .font(.custom("F37Ginger-Bold", size: 14))
                             .foregroundColor(.white)
                             .padding(.leading, reader.size.width / 16)
                         Spacer()
@@ -117,7 +118,7 @@ struct ExploreView: View {
                         Text(ExploreTab.friends.str)
                             .foregroundColor(selectedTab == .friends ? .black : .white)
                             .font(.custom("F37Ginger-Bold", size: 12))
-                            .padding(.vertical, 2)
+//                            .padding(.vertical, 2)
                             .frame(width: selectedTab == .friends ? reader.size.width / 2.5 : reader.size.width / 4.3, height: 30)
                             .background(selectedTab == .friends ? Color("Cyan") : Color.clear)
                             .cornerRadius(20)
@@ -175,14 +176,21 @@ struct ExploreView: View {
                     if (selectedTab == .friends) {
                         ScrollView(showsIndicators: false) {
                             VStack(alignment: .leading, spacing: 0) {
-                                ForEach(exploreVM.friendsToDisplay, id: \._id) { friend in
-                                    FriendCardView(width: reader.size.width, user: friend)
-                                        .environmentObject(appState)
-                                        .environmentObject(exploreVM)
+                                if !exploreVM.fetchingFriends {
+                                    ForEach(exploreVM.friendsToDisplay, id: \._id) { friend in
+                                        FriendCardView(width: reader.size.width, user: friend)
+                                            .environmentObject(appState)
+                                            .environmentObject(exploreVM)
+                                    }
+                                } else {
+                                    ForEach(0..<5, id: \.self) { _ in
+                                        LoadingCardView(width: reader.size.width)
+                                    }
                                 }
                             }
                         }
-                        .padding(.top, 10)
+                        .padding(.top, reader.size.height / 75)
+                        .padding(.bottom, reader.size.height / 21)
                     }
                     
                     Spacer()

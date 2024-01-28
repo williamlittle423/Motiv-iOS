@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import SDWebImageSwiftUI
 
 class DatabaseService {
     
@@ -143,13 +144,14 @@ class DatabaseService {
     }
     
     // MARK: Generalized function to update
-    func updateMongo(collectionName: String, filter: [String: Any], update: [String: Any]) async throws -> String {
+    func updateMongo(collectionName: String, filter: [String: Any], update: [String: Any], options: [String: Any]) async throws -> String {
         let apiURL = URL(string: "https://1jcyl0e7b8.execute-api.us-east-2.amazonaws.com/development")!
         
         let requestBody: [String: Any] = [
             "collectionName": collectionName,
             "filter": filter,
-            "update": update
+            "update": update,
+            "options": options
         ]
                 
         var request = URLRequest(url: apiURL)
@@ -172,83 +174,6 @@ class DatabaseService {
         }
     }
     
-    // MARK: Obtain a single user from MongoDB
-    func fetchUser(userID: String) async -> User? {
-        let url = URL(string: "https://jtyhvlxar7.execute-api.us-east-2.amazonaws.com/development")
-        
-        let requestBody: [String : Any] = [
-            "userID" : userID
-        ]
-        
-        var request = URLRequest(url: url!)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
-        } catch {
-            print("Error fetching user: \(error)")
-        }
-        
-        do {
-            var (data, _) = try await URLSession.shared.data(for: request)
-            
-            struct ResponseData: Codable {
-                let statusCode: Int
-                let body: String
-            }
-                        
-            let responseString = String(data: data, encoding: .utf8)
-                        
-            let responseData = try JSONDecoder().decode(ResponseData.self, from: responseString!.data(using: .utf8)!)
-                        
-            if responseData.statusCode == 200 {
-                if let userData: UserResponse = try? JSONDecoder().decode(UserResponse.self, from: responseData.body.data(using: .utf8)!) {
-                    // Create a user instance from the userData and return it
-                    let imageData = Data(base64Encoded: userData.profileImageBase64)
-                    if let image = UIImage(data: imageData!) {
-                        print("Image conversion worked from Base64 -> UIImage")
-                        // Image conversion worked
-                        let user = User(_id: userData._id,
-                                        name: userData.name,
-                                        email: userData.email,
-                                        profileImage: image,
-                                        gradYear: userData.gradYear,
-                                        program: userData.program,
-                                        joinDate: userData.joinDate,
-                                        instagram: userData.instagram,
-                                        privacy: userData.privacy,
-                                        houseID: userData.houseID,
-                                        friends: userData.friends)
-                        return user
-                    } else {
-                        let user = User(_id: userData._id,
-                                        name: userData.name,
-                                        email: userData.email,
-                                        profileImage: nil,
-                                        gradYear: userData.gradYear,
-                                        program: userData.program,
-                                        joinDate: userData.joinDate,
-                                        instagram: userData.instagram,
-                                        privacy: userData.privacy,
-                                        houseID: userData.houseID,
-                                        friends: userData.friends)
-                        return user
-                    }
-                } else {
-                    print("Failed to decode user data.")
-                    return nil
-                }
-            } else {
-                print("Non-200 status code in response.")
-                return nil
-            }
-        } catch {
-            print("Error fetching user: \(error)")
-        }
-        
-        return nil
-    }
     
     // MARK: Fetch a users profile photo
     func fetchProfilePhoto(objectKey: String) async -> String? {
@@ -270,4 +195,69 @@ class DatabaseService {
             return nil
         }
     }
+    
+    // MARK: V2 Uses SDWebImage to fetch profile images rather than direct S3 query
+    func fetchUser(userID: String) async -> User? {
+
+        let query = [
+            "_id": userID
+        ]
+            
+        let collection = "users"
+            
+        do {
+            let data = try await generalDBQuery(queryParams: query, collection: collection)
+            
+            
+            let responseString = String(data: data, encoding: .utf8)
+                        
+            let responseData = try JSONDecoder().decode(ResponseData.self, from: responseString!.data(using: .utf8)!)
+            
+            print("USER FOUND RESPONSE: \(responseData.body)")
+            
+            if responseData.statusCode == 200 {
+                if let userData: [User] = try? JSONDecoder().decode([User].self, from: responseData.body.data(using: .utf8)!) {
+                    if (userData.count == 1) {
+                        print("Returning user: \(userData[0])")
+                        return userData[0]
+                    } else {
+                        print("Error: More than one account associated with ID")
+                    }
+                } else {
+                    print("ERROR DECODING USER")
+                    return nil
+                }
+            }
+        } catch {
+            print("Error fetching user: \(error.localizedDescription)")
+        }
+        
+        
+        struct ResponseData: Codable {
+            let statusCode: Int
+            let body: String
+        }
+        
+        return nil
+    }
+    
+    // MARK: Abstract function for updating a document in MongoDB
+    func generalMongoUpdate(query: [String: Any], update: [String: Any], options: [String: Any]) async {
+        /*
+            const query = { _id: userID };
+            // For the matched friend, update the status to "friends"
+            const updateDocument = {
+              $mul: { "friends.$[i].status": "friends" }
+            };
+            // Only update the matched friend_id
+            const options = {
+              arrayFilters: [
+                {
+                  "i.friend_id": friend_id,
+                }
+              ]
+            };
+        */
+    }
+    
 }

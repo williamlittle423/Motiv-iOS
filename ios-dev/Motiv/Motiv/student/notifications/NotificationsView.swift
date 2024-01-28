@@ -13,6 +13,7 @@ struct NotificationsView: View {
     
     @EnvironmentObject var exploreVM: ExploreViewModel
     @EnvironmentObject var notificationsManager: NotificationsManager
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         GeometryReader { reader in
@@ -42,6 +43,8 @@ struct NotificationsView: View {
                         VStack(spacing: 20) {
                             ForEach(notificationsManager.friendRequests, id: \.self) { friend in
                                 FriendNotificationView(width: reader.size.width, user: friend)
+                                    .environmentObject(notificationsManager)
+                                    .environmentObject(appState)
                             }
                         }
                     }

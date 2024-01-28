@@ -187,7 +187,27 @@ class StudentSignupViewModel: ObservableObject {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // Specify your format here
         let dateString = dateFormatter.string(from: newUser.joinDate)
         
-        let userObj = User(_id: userID, name: name, email: email, profileImage: profilePicture!, gradYear: gradYear, program: program, joinDate: dateString, instagram: "", privacy: "Public", houseID: "", friends: [])
+        
+        // MARK: Extract the suffix of the inputted email and return the string of the associated school
+        func determineSchool(email: String) -> String {
+            // Extract the suffix of the email
+            let extractDomain: (String) -> String = { email in
+                let components = email.components(separatedBy: "@")
+                return components.count > 1 ? components[1] : ""
+            }
+            let suffix = extractDomain(email)
+            
+            // Verify the suffix
+            switch (suffix) {
+            case "queensu.ca":
+                return "Queen's University"
+            default:
+                return ""
+            }
+        }
+        
+        
+        let userObj = User(_id: userID, name: name, email: email, profileImageURL: url, gradYear: gradYear, program: program, joinDate: dateString, instagram: "", privacy: "Public", houseID: "", friends: [], school: determineSchool(email: email))
         
         // Try to upload user data to MongoDB
         do {
