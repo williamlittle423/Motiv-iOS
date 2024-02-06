@@ -200,7 +200,7 @@ struct UserProfileView: View {
                     }
                     
                     ScrollView(.vertical) {
-                        VStack(spacing: 5) {
+                        VStack(spacing: 10) {
                             
                             // MARK: Display the users friends
                             if self.selectedTab == .friends {

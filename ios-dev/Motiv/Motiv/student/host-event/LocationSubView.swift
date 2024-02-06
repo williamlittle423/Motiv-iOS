@@ -36,7 +36,10 @@ struct LocationSubView: View {
                     Image(systemName: "chevron.right")
                         .resizable()
                         .foregroundColor(.white)
-                        .frame(width: 12, height: 20)                }
+                        .frame(width: 12, height: 20)
+                }
+                .padding(.horizontal, width / 30)
+
             }
         }
         .padding(.horizontal, width / 15)

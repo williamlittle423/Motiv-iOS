@@ -12,12 +12,14 @@ class EventViewModel: ObservableObject {
     
     @Published var displayCreateEvent = false
     @Published var displaySearchLocation = false
+    @Published var displayInviteView = false
     
+    // MARK: All event information is stored in these published variables
     @Published var eventTitle = ""
     @Published var eventDescription = ""
     @Published var eventFullAddress = ""
     @Published var eventAddress = ""
-    
+    @Published var eventTheme = ""
     
     
     // MARK: Location search related code

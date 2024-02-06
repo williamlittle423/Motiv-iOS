@@ -22,9 +22,13 @@ class UserProfileVM: ObservableObject {
     // MARK: Obtain the users friends for display
     func fetchFriends(user: User) async {
         
+        DispatchQueue.main.async {
             self.usersFriends = []
+        }
         
         let dbService = DatabaseService()
+        
+        var fetchedFriends: [User] = []
         
         for friend in user.friends {
             print("FRIEND: \(friend)")
@@ -33,13 +37,13 @@ class UserProfileVM: ObservableObject {
                 // Fetch the user from MongoDB and add it to the list
                 if let friendUserObj = await dbService.fetchUser(userID: friend.friend_id) {
                     // Publish on the main thread
-                    DispatchQueue.main.async {
-                        self.usersFriends.append(friendUserObj)
-                    }
+                    fetchedFriends.append(friendUserObj)
+
                 } else {
                     print("ERROR FETCHING USER - origin UserProfileVM.fetchFriends")
                 }
             }
         }
+        self.usersFriends = fetchedFriends
     }
 }
