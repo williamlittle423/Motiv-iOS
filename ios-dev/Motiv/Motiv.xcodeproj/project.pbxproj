@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		86A0E7A22B4C5954006FE218 /* ExploreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0E7A12B4C5954006FE218 /* ExploreViewModel.swift */; };
-		86A0E7A42B4DBD1C006FE218 /* FriendCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0E7A32B4DBD1C006FE218 /* FriendCardView.swift */; };
+		86A0E7A42B4DBD1C006FE218 /* DiscoverFriendCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0E7A32B4DBD1C006FE218 /* DiscoverFriendCardView.swift */; };
 		86A0E7A62B55A347006FE218 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0E7A52B55A347006FE218 /* APIResponse.swift */; };
 		86A0E7AA2B55A9E3006FE218 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0E7A92B55A9E3006FE218 /* NotificationsView.swift */; };
 		86A0E7AC2B56F5A4006FE218 /* NotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0E7AB2B56F5A4006FE218 /* NotificationsManager.swift */; };
@@ -61,6 +61,13 @@
 		86E53D922B6409D70034C5C0 /* LoadingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E53D912B6409D70034C5C0 /* LoadingCardView.swift */; };
 		86E53D982B64237B0034C5C0 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 86E53D972B64237B0034C5C0 /* SDWebImageSwiftUI */; };
 		86E53D9A2B6433D10034C5C0 /* AuthTokenObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E53D992B6433D10034C5C0 /* AuthTokenObject.swift */; };
+		86E53D9C2B65F0CF0034C5C0 /* FriendCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E53D9B2B65F0CF0034C5C0 /* FriendCardView.swift */; };
+		86E53D9F2B6702120034C5C0 /* EventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E53D9E2B6702120034C5C0 /* EventViewModel.swift */; };
+		86E53DA22B6704970034C5C0 /* HostPersonalEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E53DA12B6704970034C5C0 /* HostPersonalEventView.swift */; };
+		86E53DA52B670BD50034C5C0 /* LocationSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E53DA42B670BD50034C5C0 /* LocationSearchService.swift */; };
+		86E53DA72B670CC90034C5C0 /* LocationSearchData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E53DA62B670CC90034C5C0 /* LocationSearchData.swift */; };
+		86E53DA92B6710140034C5C0 /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E53DA82B6710140034C5C0 /* LocationSearchView.swift */; };
+		86E53DAB2B68446F0034C5C0 /* LocationSubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E53DAA2B68446F0034C5C0 /* LocationSubView.swift */; };
 		86F965EA2B4207A0001F1250 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F965E92B4207A0001F1250 /* KeychainManager.swift */; };
 		86F965EC2B420BA4001F1250 /* UserAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F965EB2B420BA4001F1250 /* UserAuthentication.swift */; };
 		86F965EF2B44D07C001F1250 /* StudentRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F965EE2B44D07C001F1250 /* StudentRootView.swift */; };
@@ -97,7 +104,7 @@
 
 /* Begin PBXFileReference section */
 		86A0E7A12B4C5954006FE218 /* ExploreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewModel.swift; sourceTree = "<group>"; };
-		86A0E7A32B4DBD1C006FE218 /* FriendCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCardView.swift; sourceTree = "<group>"; };
+		86A0E7A32B4DBD1C006FE218 /* DiscoverFriendCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverFriendCardView.swift; sourceTree = "<group>"; };
 		86A0E7A52B55A347006FE218 /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
 		86A0E7A92B55A9E3006FE218 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		86A0E7AB2B56F5A4006FE218 /* NotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsManager.swift; sourceTree = "<group>"; };
@@ -144,6 +151,13 @@
 		86E08CAF2B3CA29D00E3E568 /* OnboardingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButton.swift; sourceTree = "<group>"; };
 		86E53D912B6409D70034C5C0 /* LoadingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCardView.swift; sourceTree = "<group>"; };
 		86E53D992B6433D10034C5C0 /* AuthTokenObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenObject.swift; sourceTree = "<group>"; };
+		86E53D9B2B65F0CF0034C5C0 /* FriendCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCardView.swift; sourceTree = "<group>"; };
+		86E53D9E2B6702120034C5C0 /* EventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewModel.swift; sourceTree = "<group>"; };
+		86E53DA12B6704970034C5C0 /* HostPersonalEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostPersonalEventView.swift; sourceTree = "<group>"; };
+		86E53DA42B670BD50034C5C0 /* LocationSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchService.swift; sourceTree = "<group>"; };
+		86E53DA62B670CC90034C5C0 /* LocationSearchData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchData.swift; sourceTree = "<group>"; };
+		86E53DA82B6710140034C5C0 /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
+		86E53DAA2B68446F0034C5C0 /* LocationSubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSubView.swift; sourceTree = "<group>"; };
 		86F965E92B4207A0001F1250 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		86F965EB2B420BA4001F1250 /* UserAuthentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuthentication.swift; sourceTree = "<group>"; };
 		86F965EE2B44D07C001F1250 /* StudentRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentRootView.swift; sourceTree = "<group>"; };
@@ -262,7 +276,7 @@
 			isa = PBXGroup;
 			children = (
 				86C720602B4660C4009EAE2F /* ExploreView.swift */,
-				86A0E7A32B4DBD1C006FE218 /* FriendCardView.swift */,
+				86A0E7A32B4DBD1C006FE218 /* DiscoverFriendCardView.swift */,
 				86E53D912B6409D70034C5C0 /* LoadingCardView.swift */,
 			);
 			path = explore;
@@ -295,6 +309,7 @@
 				86F965E92B4207A0001F1250 /* KeychainManager.swift */,
 				86E08C612B3C8FB800E3E568 /* ContentView.swift */,
 				86E08C8B2B3C939F00E3E568 /* AppState.swift */,
+				86E53DA32B670BB60034C5C0 /* location */,
 				86A0E7A72B55A9B2006FE218 /* network */,
 				86F965ED2B44D06D001F1250 /* student */,
 				86F965F42B44D223001F1250 /* models */,
@@ -344,16 +359,44 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		86E53D9D2B65FDF40034C5C0 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				86F965EE2B44D07C001F1250 /* StudentRootView.swift */,
+				86F965F02B44D0B4001F1250 /* StudentTabView.swift */,
+				86F965F22B44D0EB001F1250 /* PlusCircle.swift */,
+			);
+			path = Root;
+			sourceTree = "<group>";
+		};
+		86E53DA02B6704810034C5C0 /* HostEvent */ = {
+			isa = PBXGroup;
+			children = (
+				86E53DA12B6704970034C5C0 /* HostPersonalEventView.swift */,
+				86E53DAA2B68446F0034C5C0 /* LocationSubView.swift */,
+				86E53DA82B6710140034C5C0 /* LocationSearchView.swift */,
+			);
+			path = HostEvent;
+			sourceTree = "<group>";
+		};
+		86E53DA32B670BB60034C5C0 /* location */ = {
+			isa = PBXGroup;
+			children = (
+				86E53DA42B670BD50034C5C0 /* LocationSearchService.swift */,
+				86E53DA62B670CC90034C5C0 /* LocationSearchData.swift */,
+			);
+			path = location;
+			sourceTree = "<group>";
+		};
 		86F965ED2B44D06D001F1250 /* student */ = {
 			isa = PBXGroup;
 			children = (
+				86E53DA02B6704810034C5C0 /* HostEvent */,
+				86E53D9D2B65FDF40034C5C0 /* Root */,
 				86A0E7A82B55A9DA006FE218 /* notifications */,
 				86C7205F2B4660B2009EAE2F /* explore */,
 				86F966052B45B389001F1250 /* view-models */,
 				86F965F92B44F0A9001F1250 /* profile */,
-				86F965EE2B44D07C001F1250 /* StudentRootView.swift */,
-				86F965F22B44D0EB001F1250 /* PlusCircle.swift */,
-				86F965F02B44D0B4001F1250 /* StudentTabView.swift */,
 			);
 			path = student;
 			sourceTree = "<group>";
@@ -376,6 +419,7 @@
 			isa = PBXGroup;
 			children = (
 				86F965F52B44D2B9001F1250 /* UserProfileView.swift */,
+				86E53D9B2B65F0CF0034C5C0 /* FriendCardView.swift */,
 				86F965FC2B450EC0001F1250 /* UserSettingsView.swift */,
 				86F965FE2B45139B001F1250 /* SignOutButton.swift */,
 				86F965F72B44E239001F1250 /* InstagramDisplay.swift */,
@@ -396,6 +440,7 @@
 			children = (
 				86F966062B45B3AD001F1250 /* UserProfileVM.swift */,
 				86A0E7A12B4C5954006FE218 /* ExploreViewModel.swift */,
+				86E53D9E2B6702120034C5C0 /* EventViewModel.swift */,
 				86A0E7AB2B56F5A4006FE218 /* NotificationsManager.swift */,
 			);
 			path = "view-models";
@@ -560,7 +605,10 @@
 				86F965F32B44D0EB001F1250 /* PlusCircle.swift in Sources */,
 				86F965EF2B44D07C001F1250 /* StudentRootView.swift in Sources */,
 				86F965EA2B4207A0001F1250 /* KeychainManager.swift in Sources */,
+				86E53DA72B670CC90034C5C0 /* LocationSearchData.swift in Sources */,
+				86E53DA22B6704970034C5C0 /* HostPersonalEventView.swift in Sources */,
 				86B6424A2B40F97500CABC05 /* StudentSignupViewModel.swift in Sources */,
+				86E53D9C2B65F0CF0034C5C0 /* FriendCardView.swift in Sources */,
 				86B6422F2B40910F00CABC05 /* OTPTextField.swift in Sources */,
 				86A0E7AE2B56F66C006FE218 /* APIError.swift in Sources */,
 				86B642382B40C39400CABC05 /* LaunchScreen.swift in Sources */,
@@ -569,8 +617,9 @@
 				86F966092B45DA1A001F1250 /* UserResponse.swift in Sources */,
 				86C720612B4660C4009EAE2F /* ExploreView.swift in Sources */,
 				86B7E2AB2B58BFCB00A29E8E /* FriendNotificationView.swift in Sources */,
+				86E53DA92B6710140034C5C0 /* LocationSearchView.swift in Sources */,
 				86F9660B2B45DB34001F1250 /* UserUpload.swift in Sources */,
-				86A0E7A42B4DBD1C006FE218 /* FriendCardView.swift in Sources */,
+				86A0E7A42B4DBD1C006FE218 /* DiscoverFriendCardView.swift in Sources */,
 				86E08CAC2B3C9E1D00E3E568 /* MTextField.swift in Sources */,
 				86C097F52B413E1F00CBBFE2 /* StudentPasswordView.swift in Sources */,
 				86B6424E2B40FE4400CABC05 /* StudentYearView.swift in Sources */,
@@ -585,6 +634,7 @@
 				86F966072B45B3AD001F1250 /* UserProfileVM.swift in Sources */,
 				86A0E7A62B55A347006FE218 /* APIResponse.swift in Sources */,
 				86B6423C2B40CF8B00CABC05 /* OnboardingProgress.swift in Sources */,
+				86E53DA52B670BD50034C5C0 /* LocationSearchService.swift in Sources */,
 				86B6423E2B40D2A000CABC05 /* SignupButton.swift in Sources */,
 				86F965F12B44D0B4001F1250 /* StudentTabView.swift in Sources */,
 				86F965FB2B450CF7001F1250 /* Friendship.swift in Sources */,
@@ -599,7 +649,9 @@
 				86A0E7B02B56FCC0006FE218 /* UserRawResponse.swift in Sources */,
 				86E08C8E2B3C951500E3E568 /* ProgressBar.swift in Sources */,
 				86E08C8C2B3C939F00E3E568 /* AppState.swift in Sources */,
+				86E53D9F2B6702120034C5C0 /* EventViewModel.swift in Sources */,
 				86E53D9A2B6433D10034C5C0 /* AuthTokenObject.swift in Sources */,
+				86E53DAB2B68446F0034C5C0 /* LocationSubView.swift in Sources */,
 				86F965FF2B45139B001F1250 /* SignOutButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

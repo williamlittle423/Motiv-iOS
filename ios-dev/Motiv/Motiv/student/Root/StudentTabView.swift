@@ -19,6 +19,8 @@ struct StudentTabView: View {
     
     @Binding var currentTab: Tab
     
+    @EnvironmentObject var eventVM: EventViewModel
+    
     var body: some View {
         GeometryReader { reader in
             ZStack(alignment: .bottom) {
@@ -60,10 +62,9 @@ struct StudentTabView: View {
                         PlusCircle()
                             .offset(y: -14)
                             .onTapGesture(perform: {
-                                currentTab = .create
+                                eventVM.displayCreateEvent = true
                             })
                     }
-                    
                     
                     Image(systemName: "house.fill")
                         .resizable()

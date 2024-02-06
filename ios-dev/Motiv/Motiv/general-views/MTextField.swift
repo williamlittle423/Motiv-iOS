@@ -21,15 +21,15 @@ struct MTextField: View {
                 .font(.custom("F37Ginger-Light", size: 12))
                 .foregroundColor(.white)
             TextField(title, text: $text)
-                .padding(12) // Add padding inside the text field
-                .frame(height: 50) // Set the height of the text field
+                .padding(12)
+                .frame(height: 50)
                 .textInputAutocapitalization(autoCap ? .words : .never)
                 .background(
-                    RoundedRectangle(cornerRadius: 10) // Set the corner radius of the rectangle
-                        .strokeBorder(Color.white, lineWidth: 1) // Set the border color and width
+                    RoundedRectangle(cornerRadius: 10)
+                        .strokeBorder(Color.white, lineWidth: 1)
                 )
-                .foregroundColor(.white) // Set the text color inside the text field
-                .accentColor(.white) // Set the cursor and selection color
+                .foregroundColor(.white)
+                .accentColor(.white)
         }
     }
 }

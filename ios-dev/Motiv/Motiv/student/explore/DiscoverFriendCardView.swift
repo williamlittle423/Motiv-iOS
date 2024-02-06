@@ -8,7 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct FriendCardView: View {
+struct DiscoverFriendCardView: View {
     
     var width: CGFloat
     var user: User
@@ -50,27 +50,49 @@ struct FriendCardView: View {
                             // Name and school
                         }
                         // Mutual friends
-                        Text("15 Mutual Friends")
+                        Text("Suggested")
                             .foregroundColor(.gray)
-                            .font(.custom("F37Ginger", size: 12))
+                            .font(.custom("F37Ginger-Light", size: 10))
                     }
                 }
                 .padding(.horizontal)
-                Button {
-                    Task {
-                        await exploreVM.sendFriendRequest(senderID: appState.user!._id, recipientID: user._id)
+                
+                // Request not sent
+                if !(exploreVM.requestsSent.contains(user._id)) {
+                    // MARK: Add friend button
+                    Button {
+                        Task {
+                            await exploreVM.sendFriendRequest(senderID: appState.user!._id, recipientID: user._id)
+                        }
+                    } label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 5)
+                                .frame(width: width / 2.7, height: 30)
+                                .foregroundColor(Color("Cyan"))
+                            Text("Add Friend")
+                                .foregroundColor(.black)
+                                .font(.custom("F37Ginger-Bold", size: 12))
+                        }
                     }
-                } label: {
+                } else {
+                    // Display request sent
                     ZStack {
                         RoundedRectangle(cornerRadius: 5)
                             .frame(width: width / 2.7, height: 30)
-                            .foregroundColor(Color("Cyan"))
-                        Text("Add Friend")
-                            .foregroundColor(.black)
-                            .font(.custom("F37Ginger-Bold", size: 12))
+                            .foregroundColor(.clear)
+                            .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color("Cyan"), lineWidth: 1))
+                        HStack(spacing: 5) {
+                            Text("Request sent")
+                                .font(.custom("F37Ginger-Bold", size: 12))
+                                .foregroundColor(Color("Cyan"))
+                            Image(systemName: "checkmark")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 10, height: 10)
+                                .foregroundColor(Color("Cyan"))
+                        }
                     }
                 }
-
             }
             .frame(width: width / 1.2, height: width / 3)
         }

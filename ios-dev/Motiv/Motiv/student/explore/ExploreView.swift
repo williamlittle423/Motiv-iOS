@@ -178,7 +178,7 @@ struct ExploreView: View {
                             VStack(alignment: .leading, spacing: 0) {
                                 if !exploreVM.fetchingFriends {
                                     ForEach(exploreVM.friendsToDisplay, id: \._id) { friend in
-                                        FriendCardView(width: reader.size.width, user: friend)
+                                        DiscoverFriendCardView(width: reader.size.width, user: friend)
                                             .environmentObject(appState)
                                             .environmentObject(exploreVM)
                                     }

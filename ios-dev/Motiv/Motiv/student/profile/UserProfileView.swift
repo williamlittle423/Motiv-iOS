@@ -17,8 +17,11 @@ struct UserProfileView: View {
     
     @EnvironmentObject var appState: AppState
     
+    @StateObject var profileVM = UserProfileVM()
+    
     @State var selectedTab: profileTab = .friends
     @State var navigateToSettings: Bool = false
+    
     
     var body: some View {
         GeometryReader { reader in
@@ -193,19 +196,37 @@ struct UserProfileView: View {
                         }
                         
                         Spacer()
+
                     }
                     
-                    Spacer()
+                    ScrollView(.vertical) {
+                        VStack(spacing: 5) {
+                            
+                            // MARK: Display the users friends
+                            if self.selectedTab == .friends {
+                                ForEach(profileVM.usersFriends, id: \.self) { friend in
+                                    FriendCardView(width: reader.size.width, user: friend)
+                                }
+                            } else {
+                                Text("User is not in a house.")
+                                    .foregroundColor(.gray)
+                                    .font(.custom("F37Ginger-Light", size: 12))
+                                    .padding()
+                            }
+                        }
+                        .padding(.top, 7.5)
+                    }
+//                    Spacer()
                 }
             }
             .background(Image("main_background"))
             .frame(width: reader.size.width, height: reader.size.height)
+            .onAppear {
+                Task {
+                    await profileVM.fetchFriends(user: appState.user!)
+                }
+            }
         }
     }
 }
 
-struct UserProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        UserProfileView()
-    }
-}

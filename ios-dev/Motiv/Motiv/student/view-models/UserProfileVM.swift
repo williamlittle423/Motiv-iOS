@@ -13,4 +13,33 @@ class UserProfileVM: ObservableObject {
     @Published var usersFriends: [User] = []
     
     
+    func screenOpened(user: User) async {
+        Task {
+            await fetchFriends(user: user)
+        }
+    }
+    
+    // MARK: Obtain the users friends for display
+    func fetchFriends(user: User) async {
+        
+            self.usersFriends = []
+        
+        let dbService = DatabaseService()
+        
+        for friend in user.friends {
+            print("FRIEND: \(friend)")
+            // Only display friend if they are an accepted friend
+            if friend.status == "friends" {
+                // Fetch the user from MongoDB and add it to the list
+                if let friendUserObj = await dbService.fetchUser(userID: friend.friend_id) {
+                    // Publish on the main thread
+                    DispatchQueue.main.async {
+                        self.usersFriends.append(friendUserObj)
+                    }
+                } else {
+                    print("ERROR FETCHING USER - origin UserProfileVM.fetchFriends")
+                }
+            }
+        }
+    }
 }
